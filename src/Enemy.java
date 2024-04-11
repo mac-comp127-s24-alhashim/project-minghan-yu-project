@@ -1,40 +1,48 @@
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+import java.awt.Rectangle;
 
-public abstract class Enemy {
-    protected int x, y;
-    protected int health;
+public class Enemy {
+    private int x, y, size;
 
-    public Enemy(int x, int y) {
+    public Enemy(int x, int y, int size) {
         this.x = x;
         this.y = y;
+        this.size = size;
     }
 
-    public abstract void update(Player player);
-
-    public abstract void render(Graphics g);
+    public void draw(Graphics g) {
+        g.setColor(Color.RED);
+        g.fillRect(x, y, size, size);
+    }
 
     public int getX() {
         return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
     }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public int getSize() {
+        return size;
     }
 
-    public int getHealth() {
-        return health;
+    public void moveTowards(int targetX, int targetY) {
+        if (x < targetX) {
+            x++;
+        } else if (x > targetX) {
+            x--;
+        }
+        if (y < targetY) {
+            y++;
+        } else if (y > targetY) {
+            y--;
+        }
     }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
 }

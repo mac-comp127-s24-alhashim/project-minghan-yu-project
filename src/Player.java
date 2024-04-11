@@ -1,54 +1,33 @@
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.List;
-import java.awt.Color;
+import java.util.Iterator;
+import java.util.Random;
+import java.awt.Rectangle;
 
 public class Player {
-    private int x, y;
-    public static final int SIZE = 30; 
-    private int health;
-    private boolean isScoped = false;
+    private int x, y, size, dx, dy;
 
-    private Weapon equippedWeapon;
-    private List<Weapon> weapons = new ArrayList<>();
-    private int equippedWeaponIndex = -1; 
-    private double aimingDirection = 0;
-
-    public Player(int x, int y) {
+    public Player(int x, int y, int size) {
         this.x = x;
         this.y = y;
-        this.health = 100; 
+        this.size = size;
+        dx = 0;
+        dy = 0;
     }
 
-    public void addWeapon(Weapon weapon) {
-        weapons.add(weapon);
-        // If no weapon is currently equipped, equip the added one
-        if (equippedWeapon == null) {
-            equippedWeapon = weapon;
-            equippedWeaponIndex = 0;
-        }
+    public void move() {
+        x = Math.max(0, Math.min(x + dx, ShootingGame.WIDTH - size));
+        y = Math.max(0, Math.min(y + dy, ShootingGame.HEIGHT - size));
     }
 
-    public void switchWeapon() {
-        if (weapons.size() > 1) {
-            equippedWeaponIndex = (equippedWeaponIndex + 1) % weapons.size();
-            equippedWeapon = weapons.get(equippedWeaponIndex);
-            System.out.println("Switched to " + equippedWeapon.getClass().getSimpleName());
-        }
+    public void draw(Graphics g) {
+        g.setColor(Color.BLUE);
+        g.fillRect(x, y, size, size);
     }
 
-    // Method to render the player on the screen
-    public void render(Graphics g) {
-        g.setColor(Color.BLUE); // Color for the player
-        g.fillRect(x, y, SIZE, SIZE); // Draw the player as a square
-    }
-
-   
-    public void update() {
-        
-    }
-
-   
     public int getX() {
         return x;
     }
@@ -57,70 +36,37 @@ public class Player {
         return y;
     }
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public int getSize() {
+        return size;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void equipWeapon(Weapon weapon) {
-        this.equippedWeapon = weapon;
-        System.out.println("Weapon equipped.");
-    }
-
-    public void fireWeapon() {
-        if (equippedWeapon != null) {
-            equippedWeapon.fire();
-        } else {
-            System.out.println("No weapon equipped.");
+    public void keyPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_W) {
+            dy = -5;
+        } else if (keyCode == KeyEvent.VK_S) {
+            dy = 5;
+        } else if (keyCode == KeyEvent.VK_A) {
+            dx = -5;
+        } else if (keyCode == KeyEvent.VK_D) {
+            dx = 5;
+        } else if (keyCode == KeyEvent.VK_SPACE) {
+            fireBullet();
         }
     }
 
-    public void useWeapon() {
-        if (equippedWeapon instanceof AWP) {
-            if (isScoped) {
-                ((AWP) equippedWeapon).scopedFire();
-            } else {
-                System.out.println("Need to scope in before firing AWP.");
-            }
-        } else {
-            equippedWeapon.fire();
+    public void keyReleased(int keyCode) {
+        if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_S) {
+            dy = 0;
+        } else if (keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_D) {
+            dx = 0;
         }
     }
 
-    public void toggleScope() {
-        isScoped = !isScoped;
-        System.out.println("Scope " + (isScoped ? "enabled" : "disabled"));
-    }
-
-    public boolean isScoped() {
-        return isScoped;
-    }
-
-    public void move(int deltaX, int deltaY) {
-        int newX = this.x + deltaX;
-        int newY = this.y + deltaY;
-    
-        if (newX >= 0 && newX <= Game.WIDTH - Player.SIZE) {
-            this.x = newX;
-        }
-        if (newY >= 0 && newY <= Game.HEIGHT - Player.SIZE) {
-            this.y = newY;
-        }
-    }
-
-    public void setAimingDirection(double angle) {
-        this.aimingDirection = angle;
-    }
-
-    public void shoot() {
-        System.out.println("Shooting at angle (radians): " + aimingDirection);
+    private void fireBullet() {
+        int bulletX = x + size / 2 - ShootingGame.BULLET_SIZE / 2;
+        int bulletY = y + size / 2 - ShootingGame.BULLET_SIZE / 2;
+        int bulletDx = dx != 0 ? dx : 5; // 默认发射方向
+        int bulletDy = dy != 0 ? dy : 5;
+        ShootingGame.bullets.add(new Bullet(bulletX, bulletY, bulletDx, bulletDy));
     }
 }
