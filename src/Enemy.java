@@ -1,48 +1,34 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
-import java.awt.Rectangle;
 
-public class Enemy {
-    private int x, y, size;
+public class Enemy extends GameObject {
+    private int speedX = 1;
+    private int speedY = 1;
 
-    public Enemy(int x, int y, int size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    public Enemy(int x, int y, int size, int speedX,int speedy) {
+        super(x, y, size, Color.RED);
+        this.speedX = speedX==0?1:speedX;
+        this.speedY = speedy==0?1:speedy;
     }
 
+    @Override
     public void draw(Graphics g) {
-        g.setColor(Color.RED);
+        g.setColor(color);
         g.fillRect(x, y, size, size);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
+    /**
+     * move enemies toward player
+     */
     public void moveTowards(int targetX, int targetY) {
         if (x < targetX) {
-            x++;
+            x += speedX;
         } else if (x > targetX) {
-            x--;
+            x -= speedX;
         }
         if (y < targetY) {
-            y++;
+            y += speedY;
         } else if (y > targetY) {
-            y--;
+            y -= speedY;
         }
     }
 }

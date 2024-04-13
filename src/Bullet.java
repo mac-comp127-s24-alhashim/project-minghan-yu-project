@@ -1,11 +1,4 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
-import java.awt.Rectangle;
 
 public class Bullet {
     private int x, y, dx, dy;

@@ -1,18 +1,21 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ShootingGame extends JPanel implements KeyListener {
     public final static int WIDTH = 800;
     public final static int HEIGHT = 600;
+    public final static int BULLET_SIZE = 5;
+
     private final int PLAYER_SIZE = 40;
     private final int ENEMY_SIZE = 30;
-    public final static int BULLET_SIZE = 5;
+
+    private static int ENEMY_NUM = 5;
 
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -20,6 +23,9 @@ public class ShootingGame extends JPanel implements KeyListener {
     private int score;
     private int health;
     private boolean gameRunning;
+    private int currentLevel = 1;
+
+    private WeaponPanel weaponPanel;
 
     public ShootingGame() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -27,23 +33,30 @@ public class ShootingGame extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE);
+        player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE, new Pistol());
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         score = 0;
         health = 100;
         gameRunning = true;
-
-        spawnEnemies();
+        // create 3 weapon categories
+        Weapon[] weapons = new Weapon[] {new Pistol(), new Rifle(), new AWP()};
+        // create weapon panel
+        weaponPanel = new WeaponPanel(weapons);
+        // set weapon panel size
+        weaponPanel.setPreferredSize(new Dimension(150, 50));
+        // add weapon panel to canvas
+        add(weaponPanel, BorderLayout.NORTH);
+        spawnEnemies(Constant.INIT_ENMEMY_NUM);
         startGameLoop();
     }
 
-    private void spawnEnemies() {
+    private void spawnEnemies(int num) {
         Random rand = new Random();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < num; i++) {
             int x = rand.nextInt(WIDTH - ENEMY_SIZE);
             int y = rand.nextInt(HEIGHT - ENEMY_SIZE);
-            enemies.add(new Enemy(x, y, ENEMY_SIZE));
+            enemies.add(new Enemy(x, y, ENEMY_SIZE, currentLevel-1 ,currentLevel-1));
         }
     }
 
@@ -64,6 +77,7 @@ public class ShootingGame extends JPanel implements KeyListener {
 
     private void update() {
         player.move();
+        player.switchWeapon(weaponPanel.getSelectedWeapon());
         for (Bullet bullet : bullets) {
             bullet.move();
         }
@@ -72,30 +86,60 @@ public class ShootingGame extends JPanel implements KeyListener {
         spawnEnemiesIfNeeded();
         moveEnemiesTowardsPlayer();
         checkPlayerHealth();
-        checkVictoryCondition();
+        checkNextLevel(); 
+    }
+
+    /**
+     * condition to enter next level
+     */
+    private void checkNextLevel() {
+        int nextLevelThreshold = 150 * (currentLevel);
+        // check whether player's score surpass threshold for next level
+        if (score >= nextLevelThreshold) {
+            currentLevel++; // enter next level
+            if (currentLevel <= 3) {
+                JOptionPane.showMessageDialog(this, "Congratulations, Enter Next Level", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+                // update enemy number and moving speed
+                enemies.clear();
+                ENEMY_NUM = 10;
+                // add new enemies
+                spawnEnemies(ENEMY_NUM);
+            } else {
+                // game end
+                gameOver(true);
+            }
+        }
     }
 
     private void checkCollisions() {
-        Iterator<Enemy> enemyIterator = enemies.iterator();
-        while (enemyIterator.hasNext()) {
-            Enemy enemy = enemyIterator.next();
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
             Rectangle enemyRect = new Rectangle(enemy.getX(), enemy.getY(), enemy.getSize(), enemy.getSize());
-            Iterator<Bullet> bulletIterator = bullets.iterator();
-            while (bulletIterator.hasNext()) {
-                Bullet bullet = bulletIterator.next();
+            boolean iFlag = true;
+            for (int j = 0; j < bullets.size(); j++) {
+                Bullet bullet = bullets.get(j);
                 Rectangle bulletRect = new Rectangle(bullet.getX(), bullet.getY(), BULLET_SIZE, BULLET_SIZE);
                 if (enemyRect.intersects(bulletRect)) {
-                    score += 10;
-                    bulletIterator.remove();
-                    enemyIterator.remove();
+                    // get score based on current weapon type
+                    score += player.getCurrentWeapon().getScore();
+                    bullets.remove(j);
+                    enemies.remove(i);
+                    j--; 
+                    //enemy i need to be removed
+                    iFlag = false;
                     break;
                 }
             }
             Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getSize(), player.getSize());
             if (enemyRect.intersects(playerRect)) {
                 health -= 10;
-                enemyIterator.remove();
-                break;
+                if (iFlag) {
+                    enemies.remove(i);
+                    iFlag = false;
+                }
+            }
+            if (!iFlag) {
+                i--;
             }
         }
     }
@@ -106,7 +150,7 @@ public class ShootingGame extends JPanel implements KeyListener {
 
     private void spawnEnemiesIfNeeded() {
         if (enemies.size() < 5) {
-            spawnEnemies();
+            spawnEnemies(ENEMY_NUM);
         }
     }
 
@@ -120,18 +164,16 @@ public class ShootingGame extends JPanel implements KeyListener {
         if (health <= 0) {
             gameRunning = false;
             System.out.println("Game Over! Your score: " + score);
+            // game end
+            gameOver(false);
         }
     }
 
-    private void checkVictoryCondition() {
-        if (score >= 100) {
-            gameRunning = false;
-            System.out.println("You win! Your score: " + score);
-        }
-    }
-
+    /**
+     * draw game window
+     */
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         player.draw(g);
         for (Enemy enemy : enemies) {
@@ -143,6 +185,17 @@ public class ShootingGame extends JPanel implements KeyListener {
         g.setColor(Color.WHITE);
         g.drawString("Score: " + score, 20, 20);
         g.drawString("Health: " + health, 20, 40);
+    }
+
+    private void gameOver(boolean win) {
+        String message;
+        if (win) {
+            message = "You win! Your score: " + score;
+        } else {
+            message = "Game Over! Your score: " + score;
+        }
+        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);
     }
 
     @Override
@@ -159,7 +212,7 @@ public class ShootingGame extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Shooting Game");
+        JFrame frame = new JFrame("Shooting Game by FMH&YY");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.add(new ShootingGame());
@@ -168,9 +221,6 @@ public class ShootingGame extends JPanel implements KeyListener {
         frame.setVisible(true);
     }
 }
-
-
-
 
 
 

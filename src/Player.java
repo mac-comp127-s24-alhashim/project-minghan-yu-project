@@ -1,56 +1,68 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
-import java.awt.Rectangle;
 
-public class Player {
-    private int x, y, size, dx, dy;
+public class Player extends GameObject {
+    private int dx, dy;
+    private Weapon currentWeapon;
 
-    public Player(int x, int y, int size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    private Color weaponColor;
+
+    public Player(int x, int y, int size, Weapon weapon) {
+        // default color blue
+        super(x, y, size, Color.BLUE);
         dx = 0;
         dy = 0;
+        this.currentWeapon = weapon;
+        // default weapon pistol blue
+        weaponColor = Color.BLUE;
     }
 
-    public void move() {
-        x = Math.max(0, Math.min(x + dx, ShootingGame.WIDTH - size));
-        y = Math.max(0, Math.min(y + dy, ShootingGame.HEIGHT - size));
-    }
-
+    @Override
     public void draw(Graphics g) {
-        g.setColor(Color.BLUE);
+        g.setColor(weaponColor);
         g.fillRect(x, y, size, size);
     }
 
-    public int getX() {
-        return x;
+    /**
+     * move player
+     */
+    public void move() {
+        //privent out of bound of canvas
+        x = Math.max(0, Math.min(x + dx, ShootingGame.WIDTH - size)); 
+        y = Math.max(0, Math.min(y + dy, ShootingGame.HEIGHT - size));
     }
 
-    public int getY() {
-        return y;
-    }
-
-    public int getSize() {
-        return size;
+    public Weapon getCurrentWeapon() {
+        return currentWeapon;
     }
 
     public void keyPressed(int keyCode) {
-        if (keyCode == KeyEvent.VK_W) {
-            dy = -5;
-        } else if (keyCode == KeyEvent.VK_S) {
-            dy = 5;
-        } else if (keyCode == KeyEvent.VK_A) {
-            dx = -5;
-        } else if (keyCode == KeyEvent.VK_D) {
-            dx = 5;
-        } else if (keyCode == KeyEvent.VK_SPACE) {
-            fireBullet();
+        switch (keyCode) {
+            case KeyEvent.VK_W:
+                dy = -5;
+                break;
+            case KeyEvent.VK_S:
+                dy = 5;
+                break;
+            case KeyEvent.VK_A:
+                dx = -5;
+                break;
+            case KeyEvent.VK_D:
+                dx = 5;
+                break;
+            case KeyEvent.VK_UP:
+                fireWeapon(0, -1);
+                break;
+            case KeyEvent.VK_DOWN:
+                fireWeapon(0, 1);
+                break;
+            case KeyEvent.VK_LEFT:
+                fireWeapon(-1, 0);
+                break;
+            case KeyEvent.VK_RIGHT:
+                fireWeapon(1, 0);
+                break;
+            default:
         }
     }
 
@@ -62,11 +74,15 @@ public class Player {
         }
     }
 
-    private void fireBullet() {
+    public void switchWeapon(Weapon weapon) {
+        this.currentWeapon = weapon;
+        this.weaponColor = weapon.weaponColor;
+    }
+
+    public void fireWeapon( int bulletDx, int bulletDy) {
         int bulletX = x + size / 2 - ShootingGame.BULLET_SIZE / 2;
         int bulletY = y + size / 2 - ShootingGame.BULLET_SIZE / 2;
-        int bulletDx = dx != 0 ? dx : 5; // 默认发射方向
-        int bulletDy = dy != 0 ? dy : 5;
-        ShootingGame.bullets.add(new Bullet(bulletX, bulletY, bulletDx, bulletDy));
+        currentWeapon.fire(bulletX, bulletY, bulletDx, bulletDy);
     }
 }
+
