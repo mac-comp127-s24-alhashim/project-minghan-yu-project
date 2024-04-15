@@ -8,7 +8,7 @@ public class Pistol extends Weapon {
     public Pistol() {
         super();
         weaponColor = Color.BLUE;
-        image = new ImageIcon(Constant.WEAPON1_IMAGE).getImage();
+        image = new ImageIcon(Constant.PISTOL_IMAGE).getImage();
     }
 
     @Override

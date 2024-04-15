@@ -8,7 +8,7 @@ public class Rifle extends Weapon {
     public Rifle() {
         super();
         weaponColor = Color.GREEN;
-        image = new ImageIcon(Constant.WEAPON2_IMAGE).getImage();
+        image = new ImageIcon(Constant.RIFLE_IMAGE).getImage();
     }
     @Override
     public void fire(int bulletX, int bulletY, int bulletDx, int bulletDy) {

@@ -1,5 +1,7 @@
 import java.awt.*;
 
+import javax.swing.ImageIcon;
+
 public class Enemy extends GameObject {
     private int speedX = 1;
     private int speedY = 1;
@@ -14,6 +16,7 @@ public class Enemy extends GameObject {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillRect(x, y, size, size);
+        g.drawImage(new ImageIcon(Constant.ENEMY_IMAGE).getImage(), x, y, size, size, null);
     }
 
     /**

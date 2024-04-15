@@ -9,7 +9,7 @@ public class AWP extends Weapon {
     public AWP() {
         super();
         weaponColor = Color.YELLOW;
-        image = new ImageIcon(Constant.WEAPON3_IMAGE).getImage();
+        image = new ImageIcon(Constant.AWP_IMAGE).getImage();
     }
     @Override
     public void fire(int bulletX, int bulletY, int bulletDx, int bulletDy) {
