@@ -7,18 +7,21 @@ public class Enemy extends GameObject {
     private int speedX = 1;
     private int speedY = 1;
     private Random rand = new Random();
+    private boolean teamChoice;
 
-    public Enemy(int x, int y, int size, int speedX,int speedy) {
+    public Enemy(int x, int y, int size, int speedX,int speedy, boolean teamChoice) {
         super(x, y, size, Color.RED);
         this.speedX = speedX==0?1:speedX;
         this.speedY = speedy==0?1:speedy;
+        this.teamChoice = teamChoice;
     }
 
     @Override
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillRect(x, y, size, size);
-        g.drawImage(new ImageIcon(Constant.NAVI_IMAGE).getImage(), x, y, size, size, null);
+        if (teamChoice) g.drawImage(new ImageIcon(Constant.NAVI_IMAGE).getImage(), x, y, size, size, null);
+        else g.drawImage(new ImageIcon(Constant.G2_IMAGE).getImage(), x, y, size, size, null);
         // int flag = rand.nextInt(100);
         // switch (flag/10) {
         //     case 1:  g.drawImage(new ImageIcon(Constant.FAZE_IMAGE).getImage(), x, y, size, size, null);

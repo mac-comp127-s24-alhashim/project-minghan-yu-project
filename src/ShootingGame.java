@@ -13,6 +13,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.net.URL;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class ShootingGame extends JPanel implements KeyListener {
     public final static int WIDTH = 800;
@@ -31,9 +34,9 @@ public class ShootingGame extends JPanel implements KeyListener {
     private int health;
     private boolean gameRunning;
     private int currentLevel = 1;
-
     private WeaponPanel weaponPanel;
     private Clip clip;
+    private boolean teamChoice = true;
 
     
     public ShootingGame() {
@@ -41,8 +44,11 @@ public class ShootingGame extends JPanel implements KeyListener {
         setBackground(Color.BLACK);
         setFocusable(true);
         addKeyListener(this);
+        displayChoicePanel();
+    }
 
-        player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE, new Pistol());
+    private void initialize(){
+        player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE, new Pistol(), teamChoice);
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         score = 0;
@@ -59,10 +65,39 @@ public class ShootingGame extends JPanel implements KeyListener {
         playMusic("background_music.wav"); 
         spawnEnemies(Constant.INIT_ENMEMY_NUM);
         startGameLoop();
-                
-
-        
     }
+
+    private void displayChoicePanel() {
+        JDialog choiceDialog = new JDialog();
+        choiceDialog.setTitle("Choose Your Team");
+        choiceDialog.setSize(300, 100);
+        choiceDialog.setLayout(new FlowLayout());
+        choiceDialog.setModal(true);
+        choiceDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        choiceDialog.setLocationRelativeTo(null);
+
+        JButton G2Button = new JButton("G2");
+        JButton NAVIButton = new JButton("NAVI");
+
+        G2Button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                choiceDialog.dispose();
+                initialize();
+            }
+        });
+        NAVIButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                choiceDialog.dispose();
+                teamChoice = false;
+                initialize();
+            }
+        });
+
+        choiceDialog.add(G2Button);
+        choiceDialog.add(NAVIButton);
+        choiceDialog.setVisible(true);
+    }
+
     private void playMusic(String path) {
         try {
             URL url = this.getClass().getResource(path);
@@ -75,14 +110,12 @@ public class ShootingGame extends JPanel implements KeyListener {
         }
     }
 
-
-
     private void spawnEnemies(int num) {
         Random rand = new Random();
         for (int i = 0; i < num; i++) {
             int x = rand.nextInt(WIDTH - ENEMY_SIZE);
             int y = rand.nextInt(HEIGHT - ENEMY_SIZE);
-            enemies.add(new Enemy(x, y, ENEMY_SIZE, currentLevel-1 ,currentLevel-1));
+            enemies.add(new Enemy(x, y, ENEMY_SIZE, currentLevel-1 ,currentLevel-1, teamChoice));
         }
     }
 

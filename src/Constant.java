@@ -3,7 +3,7 @@ public class Constant {
     public static final String PISTOL_IMAGE = "res/Pistol.png";
     public static final String RIFLE_IMAGE = "res/Rifle.png";
     public static final String AWP_IMAGE = "res/AWP.png";
-    public static final String PLAYER_IMAGE = "res/Player.png";
+    public static final String G2_IMAGE = "res/G2.png";
 
     public static final String FAZE_IMAGE = "res/FaZe.png";
     public static final String NAVI_IMAGE = "res/NAVI.png";

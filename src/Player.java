@@ -6,10 +6,10 @@ import javax.swing.ImageIcon;
 public class Player extends GameObject {
     private int dx, dy;
     private Weapon currentWeapon;
-
     private Color weaponColor;
+    private boolean teamChoice;
 
-    public Player(int x, int y, int size, Weapon weapon) {
+    public Player(int x, int y, int size, Weapon weapon, boolean teamChoice) {
         // default color blue
         super(x, y, size, Color.BLUE);
         dx = 0;
@@ -17,13 +17,15 @@ public class Player extends GameObject {
         this.currentWeapon = weapon;
         // default weapon pistol blue
         weaponColor = Color.BLUE;
+        this.teamChoice = teamChoice;
     }
 
     @Override
     public void draw(Graphics g) {
         g.setColor(weaponColor);
         g.fillRect(x, y, size, size);
-        g.drawImage(new ImageIcon(Constant.PLAYER_IMAGE).getImage(), x, y, size, size, null);
+        if (teamChoice) g.drawImage(new ImageIcon(Constant.G2_IMAGE).getImage(), x, y, size, size, null);
+        else g.drawImage(new ImageIcon(Constant.NAVI_IMAGE).getImage(), x, y, size, size, null);
     }
 
     /**
