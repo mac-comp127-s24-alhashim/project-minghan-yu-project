@@ -8,3 +8,6 @@ public abstract class Weapon {
     public abstract void fire(int bulletX, int bulletY, int bulletDx, int bulletDy);
     public abstract int getScore();
 }
+
+
+   
