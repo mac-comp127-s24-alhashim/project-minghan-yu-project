@@ -1,11 +1,18 @@
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
+import java.net.URL;
+
 
 public class ShootingGame extends JPanel implements KeyListener {
     public final static int WIDTH = 800;
@@ -26,7 +33,9 @@ public class ShootingGame extends JPanel implements KeyListener {
     private int currentLevel = 1;
 
     private WeaponPanel weaponPanel;
+    private Clip clip;
 
+    
     public ShootingGame() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
@@ -47,9 +56,26 @@ public class ShootingGame extends JPanel implements KeyListener {
         weaponPanel.setPreferredSize(new Dimension(150, 50));
         // add weapon panel to canvas
         add(weaponPanel, BorderLayout.NORTH);
+        playMusic("background_music.wav"); 
         spawnEnemies(Constant.INIT_ENMEMY_NUM);
         startGameLoop();
+                
+
+        
     }
+    private void playMusic(String path) {
+        try {
+            URL url = this.getClass().getResource(path);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private void spawnEnemies(int num) {
         Random rand = new Random();
