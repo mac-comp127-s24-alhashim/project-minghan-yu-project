@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
+
 public class Player extends GameObject {
     private int dx, dy;
     private Weapon currentWeapon;
@@ -21,6 +23,7 @@ public class Player extends GameObject {
     public void draw(Graphics g) {
         g.setColor(weaponColor);
         g.fillRect(x, y, size, size);
+        g.drawImage(new ImageIcon(Constant.PLAYER_IMAGE).getImage(), x, y, size, size, null);
     }
 
     /**

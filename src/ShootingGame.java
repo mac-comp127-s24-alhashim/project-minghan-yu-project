@@ -119,7 +119,7 @@ public class ShootingGame extends JPanel implements KeyListener {
      * condition to enter next level
      */
     private void checkNextLevel() {
-        int nextLevelThreshold = 150 * (currentLevel);
+        int nextLevelThreshold = 200 * (currentLevel);
         // check whether player's score surpass threshold for next level
         if (score >= nextLevelThreshold) {
             currentLevel++; // enter next level

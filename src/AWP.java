@@ -23,6 +23,6 @@ public class AWP extends Weapon {
 
     @Override
     public int getScore() {
-        return 45;
+        return 25;
     }
 }

@@ -22,6 +22,6 @@ public class Rifle extends Weapon {
     }
     @Override
     public int getScore() {
-        return 20;
+        return 10;
     }
 }
