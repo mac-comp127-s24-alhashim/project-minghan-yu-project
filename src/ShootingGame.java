@@ -26,10 +26,10 @@ public class ShootingGame extends JPanel implements KeyListener {
     private final int ENEMY_SIZE = 30;
 
     private static int ENEMY_NUM = 5;
+    public static ArrayList<Bullet> bullets;
 
     private Player player;
     private ArrayList<Enemy> enemies;
-    public static ArrayList<Bullet> bullets;
     private int score;
     private int health;
     private boolean gameRunning;
@@ -37,6 +37,7 @@ public class ShootingGame extends JPanel implements KeyListener {
     private WeaponPanel weaponPanel;
     private Clip clip;
     private boolean teamChoice = true;
+    private Random rand = new Random();
 
     
     public ShootingGame() {
@@ -247,14 +248,54 @@ public class ShootingGame extends JPanel implements KeyListener {
     }
 
     private void gameOver(boolean win) {
+        if (teamChoice) gameOverG2(win);
+        else gameOverNAVI(win);
+    }
+
+    private void gameOverG2 (boolean win){
         String message;
         if (win) {
             message = "You win! Your score: " + score;
-        } else {
+        } 
+        else {
+            ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
+            ImageIcon loseIcon1 = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+            ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
+            ImageIcon loseIcon2 = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             message = "Game Over! Your score: " + score;
+            int flag = rand.nextInt(10);
+            if (flag <= 5){
+                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon1);
+                System.exit(0);
+            }
+            else {
+                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon2);
+                System.exit(0);
+            }
         }
-        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        System.exit(0);
+    }
+
+    private void gameOverNAVI (boolean win){
+        String message;
+        if (win) {
+            message = "You win! Your score: " + score;
+        } 
+        else {
+            ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
+            ImageIcon loseIcon1 = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+            ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
+            ImageIcon loseIcon2 = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+            message = "Game Over! Your score: " + score;
+            int flag = rand.nextInt(10);
+            if (flag <= 5){
+                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon1);
+                System.exit(0);
+            }
+            else {
+                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon2);
+                System.exit(0);
+            }
+        }
     }
 
     @Override

@@ -16,5 +16,8 @@ public class Constant {
     public static final String VP_IMAGE = "res/VP.png";
     public static final String ASTRALIS_IMAGE = "res/Astralis.png";
 
+    public static final String G2LOSE1_IMAGE = "res/G2Lose1.jpg";
+    public static final String G2LOSE2_IMAGE = "res/G2Lose2.jpg";
+
     public static final int INIT_ENMEMY_NUM = 7;
 }
