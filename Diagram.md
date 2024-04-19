@@ -1,0 +1,1 @@
+Class diagram: https://docs.google.com/spreadsheets/d/103HpYjVk_dEidj1OLvCKSA_QSxx6Cexldg0WFRaVB98/edit?usp=sharing
