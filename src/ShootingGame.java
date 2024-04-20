@@ -153,7 +153,7 @@ public class ShootingGame extends JPanel implements KeyListener {
      * condition to enter next level
      */
     private void checkNextLevel() {
-        int nextLevelThreshold = 200 * (currentLevel);
+        int nextLevelThreshold = 200 * currentLevel;
         // check whether player's score surpass threshold for next level
         if (score >= nextLevelThreshold) {
             currentLevel++; // enter next level
@@ -164,10 +164,8 @@ public class ShootingGame extends JPanel implements KeyListener {
                 ENEMY_NUM = 10;
                 // add new enemies
                 spawnEnemies(ENEMY_NUM);
-            } else {
-                // game end
-                gameOver(true);
-            }
+            } 
+            else gameOver(true);
         }
     }
 
@@ -254,48 +252,40 @@ public class ShootingGame extends JPanel implements KeyListener {
 
     private void gameOverG2 (boolean win){
         String message;
+        ImageIcon icon;
         if (win) {
             message = "You win! Your score: " + score;
+            icon = null;
         } 
         else {
             ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
-            ImageIcon loseIcon1 = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
-            ImageIcon loseIcon2 = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             message = "Game Over! Your score: " + score;
             int flag = rand.nextInt(10);
-            if (flag <= 5){
-                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon1);
-                System.exit(0);
-            }
-            else {
-                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon2);
-                System.exit(0);
-            }
+            if (flag <= 5) icon = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+            else icon = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
         }
+        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, icon);
+        System.exit(0);
     }
 
     private void gameOverNAVI (boolean win){
         String message;
+        ImageIcon icon;
         if (win) {
             message = "You win! Your score: " + score;
+            icon = null;
         } 
         else {
             ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
-            ImageIcon loseIcon1 = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
-            ImageIcon loseIcon2 = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             message = "Game Over! Your score: " + score;
             int flag = rand.nextInt(10);
-            if (flag <= 5){
-                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon1);
-                System.exit(0);
-            }
-            else {
-                JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, loseIcon2);
-                System.exit(0);
-            }
+            if (flag <= 5) icon = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
+            else icon = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
         }
+        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, icon);
+        System.exit(0);
     }
 
     @Override
