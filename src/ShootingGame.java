@@ -48,7 +48,27 @@ public class ShootingGame extends JPanel implements KeyListener {
         displayChoicePanel();
     }
 
-    private void initialize(){
+    // private void initialize(){
+    //     player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE, new Pistol(), teamChoice);
+    //     enemies = new ArrayList<>();
+    //     bullets = new ArrayList<>();
+    //     score = 0;
+    //     health = 100;
+    //     gameRunning = true;
+    //     // create 3 weapon categories
+    //     Weapon[] weapons = new Weapon[] {new Pistol(), new Rifle(), new AWP()};
+    //     // create weapon panel
+    //     weaponPanel = new WeaponPanel(weapons);
+    //     // set weapon panel size
+    //     weaponPanel.setPreferredSize(new Dimension(150, 50));
+    //     // add weapon panel to canvas
+    //     add(weaponPanel, BorderLayout.NORTH);
+    //     playMusic("background_music.wav"); 
+    //     spawnEnemies(Constant.INIT_ENMEMY_NUM);
+    //     startGameLoop();
+    // }
+
+    private void initialize() {
         player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE, new Pistol(), teamChoice);
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -63,10 +83,18 @@ public class ShootingGame extends JPanel implements KeyListener {
         weaponPanel.setPreferredSize(new Dimension(150, 50));
         // add weapon panel to canvas
         add(weaponPanel, BorderLayout.NORTH);
-        playMusic("background_music.wav"); 
+        
+        // Choose background music based on the team choice
+        if (teamChoice) {
+            playMusic("background_music_1.wav");
+        } else {
+            playMusic("background_music_2.wav");
+        }
+    
         spawnEnemies(Constant.INIT_ENMEMY_NUM);
         startGameLoop();
     }
+    
 
     private void displayChoicePanel() {
         JDialog choiceDialog = new JDialog();
