@@ -4,15 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-import java.net.URL;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -35,11 +26,12 @@ public class ShootingGame extends JPanel implements KeyListener {
     private boolean gameRunning;
     private int currentLevel = 1;
     private WeaponPanel weaponPanel;
-    private Clip clip;
     private boolean teamChoice = true;
     private Random rand = new Random();
 
-    
+    private Music music = new Music();
+
+
     public ShootingGame() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
@@ -64,12 +56,12 @@ public class ShootingGame extends JPanel implements KeyListener {
         weaponPanel.setPreferredSize(new Dimension(150, 50));
         // add weapon panel to canvas
         add(weaponPanel, BorderLayout.NORTH);
-        
+
         // Choose background music based on the team choice
         if (teamChoice) {
-            playMusic("background_music_1.wav");
+            music.playMusic("background_music_1.wav");
         } else {
-            playMusic("background_music_2.wav");
+            music.playMusic("background_music_2.wav");
         }
     
         spawnEnemies(Constant.INIT_ENMEMY_NUM);
@@ -92,6 +84,7 @@ public class ShootingGame extends JPanel implements KeyListener {
         G2Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 choiceDialog.dispose();
+                teamChoice = true;
                 initialize();
             }
         });
@@ -108,17 +101,7 @@ public class ShootingGame extends JPanel implements KeyListener {
         choiceDialog.setVisible(true);
     }
 
-    private void playMusic(String path) {
-        try {
-            URL url = this.getClass().getResource(path);
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private void spawnEnemies(int num) {
         Random rand = new Random();
@@ -255,9 +238,11 @@ public class ShootingGame extends JPanel implements KeyListener {
     }
 
     private void gameOver(boolean win) {
+        music.stopMusic();
         if (teamChoice) gameOverG2(win);
         else gameOverNAVI(win);
     }
+
 
     private void gameOverG2 (boolean win){
         String message;
@@ -265,11 +250,13 @@ public class ShootingGame extends JPanel implements KeyListener {
         if (win) {
             message = "You win! Your score: " + score;
             icon = null;
+            music.playWinningMusic();
         } 
         else {
             ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
             ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
             message = "Game Over! Your score: " + score;
+            music.playLosingMusic();
             int flag = rand.nextInt(10);
             if (flag <= 5) icon = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             else icon = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
@@ -284,11 +271,13 @@ public class ShootingGame extends JPanel implements KeyListener {
         if (win) {
             message = "You win! Your score: " + score;
             icon = null;
+            music.playWinningMusic();
         } 
         else {
             ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
             ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
             message = "Game Over! Your score: " + score;
+            music.playLosingMusic();
             int flag = rand.nextInt(10);
             if (flag <= 5) icon = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
             else icon = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
