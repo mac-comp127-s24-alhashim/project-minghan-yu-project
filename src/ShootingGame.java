@@ -239,51 +239,8 @@ public class ShootingGame extends JPanel implements KeyListener {
 
     private void gameOver(boolean win) {
         music.stopMusic();
-        if (teamChoice) gameOverG2(win);
-        else gameOverNAVI(win);
-    }
-
-
-    private void gameOverG2 (boolean win){
-        String message;
-        ImageIcon icon;
-        if (win) {
-            message = "You win! Your score: " + score;
-            icon = null;
-            music.playWinningMusic();
-        } 
-        else {
-            ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
-            ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
-            message = "Game Over! Your score: " + score;
-            music.playLosingMusic();
-            int flag = rand.nextInt(10);
-            if (flag <= 5) icon = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-            else icon = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-        }
-        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, icon);
-        System.exit(0);
-    }
-
-    private void gameOverNAVI (boolean win){
-        String message;
-        ImageIcon icon;
-        if (win) {
-            message = "You win! Your score: " + score;
-            icon = null;
-            music.playWinningMusic();
-        } 
-        else {
-            ImageIcon icon1 = new ImageIcon(Constant.G2LOSE1_IMAGE);
-            ImageIcon icon2 = new ImageIcon(Constant.G2LOSE2_IMAGE);
-            message = "Game Over! Your score: " + score;
-            music.playLosingMusic();
-            int flag = rand.nextInt(10);
-            if (flag <= 5) icon = new ImageIcon(icon1.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-            else icon = new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-        }
-        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, icon);
-        System.exit(0);
+        GameOverHandler gameOverHandler = new GameOverHandler(music, score);
+        gameOverHandler.gameOver(win, teamChoice);
     }
 
     @Override
