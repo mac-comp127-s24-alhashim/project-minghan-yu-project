@@ -30,6 +30,7 @@ public class ShootingGame extends JPanel implements KeyListener {
     private Random rand = new Random();
 
     private Music music = new Music();
+    private GameUpdater gameUpdater;
 
 
     public ShootingGame() {
@@ -63,11 +64,13 @@ public class ShootingGame extends JPanel implements KeyListener {
         } else {
             music.playMusic("background_music_2.wav");
         }
-    
-        spawnEnemies(Constant.INIT_ENMEMY_NUM);
+
+        gameUpdater = new GameUpdater(this, player, enemies, bullets, weaponPanel, 
+        score, health, currentLevel, gameRunning, music, teamChoice);
+        gameUpdater.spawnEnemies(Constant.INIT_ENMEMY_NUM);
+
         startGameLoop();
     }
-    
 
     private void displayChoicePanel() {
         JDialog choiceDialog = new JDialog();
@@ -101,21 +104,12 @@ public class ShootingGame extends JPanel implements KeyListener {
         choiceDialog.setVisible(true);
     }
 
-
-
-    private void spawnEnemies(int num) {
-        Random rand = new Random();
-        for (int i = 0; i < num; i++) {
-            int x = rand.nextInt(WIDTH - ENEMY_SIZE);
-            int y = rand.nextInt(HEIGHT - ENEMY_SIZE);
-            enemies.add(new Enemy(x, y, ENEMY_SIZE, currentLevel-1 ,currentLevel-1, teamChoice));
-        }
-    }
-
     private void startGameLoop() {
         Thread gameLoop = new Thread(() -> {
             while (gameRunning) {
-                update();
+                gameUpdater.update();
+                score = gameUpdater.getScore();
+                health = gameUpdater.getHealth();
                 repaint();
                 try {
                     Thread.sleep(16); // ~60 FPS
@@ -125,98 +119,6 @@ public class ShootingGame extends JPanel implements KeyListener {
             }
         });
         gameLoop.start();
-    }
-
-    private void update() {
-        player.move();
-        player.switchWeapon(weaponPanel.getSelectedWeapon());
-        for (Bullet bullet : bullets) {
-            bullet.move();
-        }
-        checkCollisions();
-        removeOutOfBoundsBullets();
-        spawnEnemiesIfNeeded();
-        moveEnemiesTowardsPlayer();
-        checkPlayerHealth();
-        checkNextLevel(); 
-    }
-
-    /**
-     * condition to enter next level
-     */
-    private void checkNextLevel() {
-        int nextLevelThreshold = 200 * currentLevel;
-        // check whether player's score surpass threshold for next level
-        if (score >= nextLevelThreshold) {
-            currentLevel++; // enter next level
-            if (currentLevel <= 3) {
-                JOptionPane.showMessageDialog(this, "Congratulations, Enter Next Level", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-                // update enemy number and moving speed
-                enemies.clear();
-                ENEMY_NUM = 10;
-                // add new enemies
-                spawnEnemies(ENEMY_NUM);
-            } 
-            else gameOver(true);
-        }
-    }
-
-    private void checkCollisions() {
-        for (int i = 0; i < enemies.size(); i++) {
-            Enemy enemy = enemies.get(i);
-            Rectangle enemyRect = new Rectangle(enemy.getX(), enemy.getY(), enemy.getSize(), enemy.getSize());
-            boolean iFlag = true;
-            for (int j = 0; j < bullets.size(); j++) {
-                Bullet bullet = bullets.get(j);
-                Rectangle bulletRect = new Rectangle(bullet.getX(), bullet.getY(), BULLET_SIZE, BULLET_SIZE);
-                if (enemyRect.intersects(bulletRect)) {
-                    // get score based on current weapon type
-                    score += player.getCurrentWeapon().getScore();
-                    bullets.remove(j);
-                    enemies.remove(i);
-                    j--; 
-                    //enemy i need to be removed
-                    iFlag = false;
-                    break;
-                }
-            }
-            Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getSize(), player.getSize());
-            if (enemyRect.intersects(playerRect)) {
-                health -= 10;
-                if (iFlag) {
-                    enemies.remove(i);
-                    iFlag = false;
-                }
-            }
-            if (!iFlag) {
-                i--;
-            }
-        }
-    }
-
-    private void removeOutOfBoundsBullets() {
-        bullets.removeIf(bullet -> bullet.getX() < 0 || bullet.getX() > WIDTH || bullet.getY() < 0 || bullet.getY() > HEIGHT);
-    }
-
-    private void spawnEnemiesIfNeeded() {
-        if (enemies.size() < 5) {
-            spawnEnemies(ENEMY_NUM);
-        }
-    }
-
-    private void moveEnemiesTowardsPlayer() {
-        for (Enemy enemy : enemies) {
-            enemy.moveTowards(player.getX(), player.getY());
-        }
-    }
-
-    private void checkPlayerHealth() {
-        if (health <= 0) {
-            gameRunning = false;
-            System.out.println("Game Over! Your score: " + score);
-            // game end
-            gameOver(false);
-        }
     }
 
     /**
@@ -229,18 +131,14 @@ public class ShootingGame extends JPanel implements KeyListener {
         for (Enemy enemy : enemies) {
             enemy.draw(g);
         }
+        // enemies.forEach(enemy -> enemy.draw(g));
         for (Bullet bullet : bullets) {
             bullet.draw(g);
         }
+        // bullets.forEach(bullet -> bullet.draw(g));
         g.setColor(Color.WHITE);
         g.drawString("Score: " + score, 20, 20);
         g.drawString("Health: " + health, 20, 40);
-    }
-
-    private void gameOver(boolean win) {
-        music.stopMusic();
-        GameOverHandler gameOverHandler = new GameOverHandler(music, score);
-        gameOverHandler.gameOver(win, teamChoice);
     }
 
     @Override
