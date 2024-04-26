@@ -3,6 +3,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -14,8 +16,10 @@ public class Music {
             clip.stop(); 
         }
         try {
-            URL url = getClass().getResource(path); 
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+            // URL url = getClass().getResource(path); 
+            // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+            File soundFile = new File(path);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start(); 
@@ -30,13 +34,5 @@ public class Music {
             clip.stop();
             clip.close();
         }
-    }
-
-    public void playWinningMusic() {
-        playMusic("winning_music.wav");
-    }
-
-    public void playLosingMusic() {
-        playMusic("losing_music.wav");
     }
 }
