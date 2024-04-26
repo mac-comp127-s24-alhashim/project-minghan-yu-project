@@ -28,10 +28,11 @@ public class GameOverHandler {
         ImageIcon icon = null;
         if (win) {
             message = "You win! Your score: " + score;
-            music.playWinningMusic();
+            // music.playMusic("Reason_win.wav");
+            icon = new resizeImage(Constant.G2WIN_IMAGE);
         } else {
             message = "Game Over! Your score: " + score;
-            music.playLosingMusic();
+            // music.playMusic("Reason_lose.wav");
             icon = chooseIcon(Constant.G2LOSE1_IMAGE, Constant.G2LOSE2_IMAGE);
         }
         JOptionPane.showMessageDialog(null, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, icon);
@@ -43,11 +44,12 @@ public class GameOverHandler {
         ImageIcon icon = null;
         if (win) {
             message = "You win! Your score: " + score;
-            music.playWinningMusic();
+            // music.playMusic("Inhuman_win.wav");
+            icon = resizeImage(Constant.NAVIWIN_IMAGE);
         } else {
             message = "Game Over! Your score: " + score;
-            music.playLosingMusic();
-            icon = chooseIcon(Constant.G2LOSE1_IMAGE, Constant.G2LOSE2_IMAGE);
+            // music.playMusic("Inhuman_lose.wav");
+            icon = chooseIcon(Constant.NAVILOSE1_IMAGE, Constant.NAVILOSE2_IMAGE);
         }
         JOptionPane.showMessageDialog(null, message, "Game Over", JOptionPane.INFORMATION_MESSAGE, icon);
         System.exit(0);
@@ -62,5 +64,10 @@ public class GameOverHandler {
         } else {
             return new ImageIcon(icon2.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
         }
+    }
+
+    private ImageIcon resizeIcon(String img) {
+        ImageIcon icon = new ImageIcon(img);
+        return new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
     }
 }

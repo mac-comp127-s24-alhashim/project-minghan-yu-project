@@ -14,7 +14,7 @@ public class Music {
             clip.stop(); 
         }
         try {
-            URL url = getClass().getResource(path);
+            URL url = getClass().getResource(path); 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);

@@ -111,7 +111,8 @@ public class GameUpdater extends JPanel {
     }
 
     private void removeOutOfBoundsBullets() {
-        bullets.removeIf(bullet -> bullet.getX() < 0 || bullet.getX() > WIDTH || bullet.getY() < 0 || bullet.getY() > HEIGHT);
+        if (bullets != null)
+        bullets.removeIf(bullet -> !bullets.contains(bullet) && (bullet.getX() < 0 || bullet.getX() > WIDTH || bullet.getY() < 0 || bullet.getY() > HEIGHT));
     }
 
     private void spawnEnemiesIfNeeded() {
