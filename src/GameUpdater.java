@@ -1,6 +1,8 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -78,34 +80,26 @@ public class GameUpdater extends JPanel {
     }
 
     private void checkCollisions() {
-        for (int i = 0; i < enemies.size(); i++) {
-            Enemy enemy = enemies.get(i);
+        Iterator<Enemy> enemyIterator = enemies.iterator();
+        while (enemyIterator.hasNext()) {
+            Enemy enemy = enemyIterator.next();
             Rectangle enemyRect = new Rectangle(enemy.getX(), enemy.getY(), enemy.getSize(), enemy.getSize());
-            boolean iFlag = true;
-            for (int j = 0; j < bullets.size(); j++) {
-                Bullet bullet = bullets.get(j);
+            Iterator<Bullet> bulletIterator = bullets.iterator();
+            while (bulletIterator.hasNext()) {
+                Bullet bullet = bulletIterator.next();
                 Rectangle bulletRect = new Rectangle(bullet.getX(), bullet.getY(), BULLET_SIZE, BULLET_SIZE);
                 if (enemyRect.intersects(bulletRect)) {
-                    // get score based on current weapon type
-                    score += player.getCurrentWeapon().getScore();
-                    bullets.remove(j);
-                    enemies.remove(i);
-                    j--; 
-                    //enemy i need to be removed
-                    iFlag = false;
+                    score += 10;
+                    bulletIterator.remove();
+                    enemyIterator.remove();
                     break;
                 }
             }
             Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getSize(), player.getSize());
             if (enemyRect.intersects(playerRect)) {
                 health -= 10;
-                if (iFlag) {
-                    enemies.remove(i);
-                    iFlag = false;
-                }
-            }
-            if (!iFlag) {
-                i--;
+                enemyIterator.remove();
+                break;
             }
         }
     }
