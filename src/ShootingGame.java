@@ -60,7 +60,7 @@ public class ShootingGame extends JPanel implements KeyListener {
 
         // Choose background music based on the team choice
         if (teamChoice) {
-            music.playMusic("res/background_music_2.wav");
+            music.playMusic("res/Music/background_music_2.wav");
         } else {
             music.playMusic("res/Music/background_music_1.wav");
         }
