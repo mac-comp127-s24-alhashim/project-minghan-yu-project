@@ -1,8 +1,7 @@
 import javax.swing.*;
-
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Random;
 
 
@@ -80,33 +79,46 @@ public class GameUpdater extends JPanel {
     }
 
     private void checkCollisions() {
-        Iterator<Enemy> enemyIterator = enemies.iterator();
-        while (enemyIterator.hasNext()) {
-            Enemy enemy = enemyIterator.next();
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
             Rectangle enemyRect = new Rectangle(enemy.getX(), enemy.getY(), enemy.getSize(), enemy.getSize());
-            Iterator<Bullet> bulletIterator = bullets.iterator();
-            while (bulletIterator.hasNext()) {
-                Bullet bullet = bulletIterator.next();
+            boolean i_exit = true;
+            for (int j = 0; j < bullets.size(); j++) {
+                Bullet bullet = bullets.get(j);
                 Rectangle bulletRect = new Rectangle(bullet.getX(), bullet.getY(), BULLET_SIZE, BULLET_SIZE);
                 if (enemyRect.intersects(bulletRect)) {
-                    score += 10;
-                    bulletIterator.remove();
-                    enemyIterator.remove();
+                    score += player.getCurrentWeapon().getScore();
+                    bullets.remove(j);
+                    enemies.remove(i);
+                    j--; 
+                    i_exit = false;
                     break;
                 }
             }
             Rectangle playerRect = new Rectangle(player.getX(), player.getY(), player.getSize(), player.getSize());
             if (enemyRect.intersects(playerRect)) {
                 health -= 10;
-                enemyIterator.remove();
-                break;
+                if (i_exit) {
+                    enemies.remove(i);
+                    i_exit = false;
+                }
+            }
+            if (!i_exit) {
+                i--;
             }
         }
     }
 
     private void removeOutOfBoundsBullets() {
-        if (bullets != null)
-        bullets.removeIf(bullet -> !bullets.contains(bullet) && (bullet.getX() < 0 || bullet.getX() > WIDTH || bullet.getY() < 0 || bullet.getY() > HEIGHT));
+        if (bullets != null) {
+            ListIterator<Bullet> iterator = bullets.listIterator();
+            while(iterator.hasNext()) {
+                Bullet bullet = iterator.next();
+                if (bullet.getX() < 0 || bullet.getX() > WIDTH || bullet.getY() < 0 || bullet.getY() > HEIGHT) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     private void spawnEnemiesIfNeeded() {

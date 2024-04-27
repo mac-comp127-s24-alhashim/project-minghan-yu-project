@@ -128,11 +128,13 @@ public class ShootingGame extends JPanel implements KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         player.draw(g);
-        for (Enemy enemy : enemies) {
+        ArrayList<Enemy> enemiesCopy = new ArrayList<>(enemies);
+        for (Enemy enemy : enemiesCopy) {
             enemy.draw(g);
         }
         // enemies.forEach(enemy -> enemy.draw(g));
-        for (Bullet bullet : bullets) {
+        ArrayList<Bullet> bulletsCopy = new ArrayList<>(bullets);
+        for (Bullet bullet : bulletsCopy) {
             bullet.draw(g);
         }
         // bullets.forEach(bullet -> bullet.draw(g));
