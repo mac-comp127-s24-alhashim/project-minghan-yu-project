@@ -3,7 +3,7 @@
 ## Minghan Fan (mfan@macalester.edu), Yu Yan (yyan@macalester.edu)
 
 ### Description
-Shooting Game is a single-player action-packed game where the player navigates a character who must shoot enemies approaching from all directions, and keep tracking the movement of the player. The player can use the WASD(W-moves up, A-moves left, S-moves down, D-moves right) keys to control the character and the arrow keys on the keyboard to shoot in four directions(left arrow-shoot left, right arrow-shooting right, up arrow- shooting bullets upwards, down arrow-shooting bullets downwards). First, the player chooses the team that the character represents. They can choose the character from team “G2” or team “Navi”. In the game, different labels represent enemies from various teams by noting the unique symbols and colors of each enemy icon. The team names and enemy icons are referencing esports organizations which participate in a game called CounterStrike’s professional matches.  The game progresses through various difficulty levels, with easier levels featuring fewer, slower enemies and more challenging levels increasing the number and speed of enemies. 
+Shooting Game is a single-player action-packed game where the player navigates a character who shoots enemies approaching from all directions, and they keep tracking the movement of the player. The player can use the WASD(W-moves up, A-moves left, S-moves down, D-moves right) keys to control the character and the arrow keys on the keyboard to shoot in four directions(left arrow-shoot left, right arrow-shooting right, up arrow- shooting bullets upwards, down arrow-shooting bullets downwards). First, the player chooses the team that the character represents. The player can choose the character from team “G2” or team “Navi”. In the game, different labels represent enemies from various teams by noting the unique symbols and colors of each enemy icon. The team names and enemy icons are referencing esports organizations that participate in a game called CounterStrike’s professional matches.  The game progresses through various difficulty levels, with easier levels featuring fewer, slower enemies and more challenging levels increasing the number and speed of enemies. 
 
 ### Key Features
 - **Health System**: Player starts with a set amount of health, which decreases if an enemy attacks the player(touches the player). The game ends if health reaches zero.
@@ -37,4 +37,4 @@ This game was developed using resources from the following:
 
 
 ### Demo Video
-
+https://drive.google.com/file/d/1QHjdUTt8PzX1dJXBnJdPqmAJdUCKIAXz/view?usp=sharing
