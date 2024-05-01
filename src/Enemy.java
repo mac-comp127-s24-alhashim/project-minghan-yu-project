@@ -11,7 +11,6 @@ public class Enemy extends GameObject {
     private boolean teamChoice;
 
     public Enemy(int x, int y, int size, int speedX,int speedy, boolean teamChoice) {
-        // super(x, y, size, new Color(199,0,0));
         super(x, y, size, Color.BLACK);
         this.speedX = speedX==0?1:speedX;
         this.speedY = speedy==0?1:speedy;
@@ -22,8 +21,6 @@ public class Enemy extends GameObject {
     public void draw(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(x, y, size, size);
-        // if (teamChoice) g.drawImage(new ImageIcon(Constant.NAVI_IMAGE).getImage(), x, y, size, size, null);
-        // else g.drawImage(new ImageIcon(Constant.G2_IMAGE).getImage(), x, y, size, size, null);
         if (teamChoice){
             switch (flag/10) {
                 case 1:  g.drawImage(new ImageIcon(Constant.FAZE_IMAGE).getImage(), x, y, size, size, null);

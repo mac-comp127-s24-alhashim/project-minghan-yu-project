@@ -1,7 +1,4 @@
-import javax.swing.ImageIcon;
-
 public class Constant {
-
     public static final String PISTOL_IMAGE = "res/Image/Weapon/Pistol.png";
     public static final String RIFLE_IMAGE = "res/Image/Weapon/Rifle.png";
     public static final String AWP_IMAGE = "res/Image/Weapon/AWP.png";

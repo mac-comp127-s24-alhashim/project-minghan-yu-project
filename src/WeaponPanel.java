@@ -8,10 +8,12 @@ import java.awt.event.MouseEvent;
  * show wwapon image & handle mouse/key movement
  */
 public class WeaponPanel extends JPanel {
+
     /**
      * store weapon
      */
     private Weapon[] weapons;
+
     /**
      * current selected weapon index
      */
@@ -19,8 +21,7 @@ public class WeaponPanel extends JPanel {
 
     public WeaponPanel(Weapon[] weapons) {
         this.weapons = weapons;
-        // default weapon pistol
-        selectedIndex = 0;
+        selectedIndex = 0; // default weapon pistol
         // switch weapon based on mouse movement
         addMouseListener(new MouseAdapter() {
             @Override

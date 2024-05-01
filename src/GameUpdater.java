@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -62,8 +63,7 @@ public class GameUpdater extends JPanel {
      * condition to enter next level
      */
     private void checkNextLevel() {
-        int nextLevelThreshold = 200 * currentLevel;
-        // check whether player's score surpass threshold for next level
+        int nextLevelThreshold = 200 * currentLevel; // check whether player's score surpass threshold for next level
         if (score >= nextLevelThreshold) {
             currentLevel++; // enter next level
             if (currentLevel <= 3) {
@@ -71,8 +71,7 @@ public class GameUpdater extends JPanel {
                 // update enemy number and moving speed
                 enemies.clear();
                 ENEMY_NUM = 10;
-                // add new enemies
-                spawnEnemies(ENEMY_NUM);
+                spawnEnemies(ENEMY_NUM); // add new enemies
             } 
             else gameOver(true);
         }

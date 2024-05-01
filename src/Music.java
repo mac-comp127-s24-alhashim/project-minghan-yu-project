@@ -6,7 +6,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 public class Music {
     private Clip clip;
@@ -16,8 +15,6 @@ public class Music {
             clip.stop(); 
         }
         try {
-            // URL url = getClass().getResource(path); 
-            // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
             File soundFile = new File(path);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
             clip = AudioSystem.getClip();

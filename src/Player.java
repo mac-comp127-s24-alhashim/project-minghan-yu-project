@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
-
 import javax.swing.ImageIcon;
 
 public class Player extends GameObject {
@@ -10,13 +9,11 @@ public class Player extends GameObject {
     private boolean teamChoice;
 
     public Player(int x, int y, int size, Weapon weapon, boolean teamChoice) {
-        // default color blue
-        super(x, y, size, Color.BLUE);
+        super(x, y, size, Color.BLUE); // default color blue
         dx = 0;
         dy = 0;
         this.currentWeapon = weapon;
-        // default weapon pistol blue
-        weaponColor = Color.BLUE;
+        weaponColor = Color.BLUE; // default weapon pistol blue
         this.teamChoice = teamChoice;
     }
 

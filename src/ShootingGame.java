@@ -28,7 +28,6 @@ public class ShootingGame extends JPanel implements KeyListener {
     private WeaponPanel weaponPanel;
     private boolean teamChoice = true;
     private Random rand = new Random();
-
     private Music music = new Music();
     private GameUpdater gameUpdater;
 
@@ -41,7 +40,6 @@ public class ShootingGame extends JPanel implements KeyListener {
         displayChoicePanel();
     }
 
-
     private void initialize() {
         player = new Player(WIDTH / 2, HEIGHT - 100, PLAYER_SIZE, new Pistol(), teamChoice);
         enemies = new ArrayList<>();
@@ -49,14 +47,10 @@ public class ShootingGame extends JPanel implements KeyListener {
         score = 0;
         health = 100;
         gameRunning = true;
-        // create 3 weapon categories
-        Weapon[] weapons = new Weapon[] {new Pistol(), new Rifle(), new AWP()};
-        // create weapon panel
-        weaponPanel = new WeaponPanel(weapons);
-        // set weapon panel size
-        weaponPanel.setPreferredSize(new Dimension(150, 50));
-        // add weapon panel to canvas
-        add(weaponPanel, BorderLayout.NORTH);
+        Weapon[] weapons = new Weapon[] {new Pistol(), new Rifle(), new AWP()}; // create 3 weapon categories
+        weaponPanel = new WeaponPanel(weapons); // create weapon panel
+        weaponPanel.setPreferredSize(new Dimension(150, 50)); // set weapon panel size
+        add(weaponPanel, BorderLayout.NORTH); // add weapon panel to canvas
 
         // Choose background music based on the team choice
         if (teamChoice) {
@@ -132,12 +126,12 @@ public class ShootingGame extends JPanel implements KeyListener {
         for (Enemy enemy : enemiesCopy) {
             enemy.draw(g);
         }
-        // enemies.forEach(enemy -> enemy.draw(g));
+        // enemiesCopy.forEach(enemy -> enemy.draw(g));
         ArrayList<Bullet> bulletsCopy = new ArrayList<>(bullets);
         for (Bullet bullet : bulletsCopy) {
             bullet.draw(g);
         }
-        // bullets.forEach(bullet -> bullet.draw(g));
+        // bulletsCopy.forEach(bullet -> bullet.draw(g));
         g.setColor(Color.WHITE);
         g.drawString("Score: " + score, 20, 20);
         g.drawString("Health: " + health, 20, 40);
